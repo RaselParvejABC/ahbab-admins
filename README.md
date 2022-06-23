@@ -2,7 +2,7 @@
 
 App for Admins of Al-Ahbab Society, Doha, Qatar.
 
-#Screenshots of the App
+# Screenshots of the App
 
 <img src="screenshots/screenshot (1).jpg" width="250">
 <img src="screenshots/screenshot (2).jpg" width="250">
