@@ -11,7 +11,6 @@ import 'package:sanitize_html/sanitize_html.dart' show sanitizeHtml;
 import '../auth/auth.dart';
 
 class AddMemberScreen extends StatefulWidget {
-
   static String get label => "নতুন সদস্য এন্ট্রি";
   static String get requiredAdminPrivilege => "member-add";
   static String get routeName => "AddMemberScreen";
@@ -62,7 +61,8 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                   child: const Text('ডাটাবেসে সেভ করুন'),
                   onPressed: () async {
                     // Validate returns true if the form is valid, or false otherwise.
-                    if (_formKey.currentState!.validate() && _profileImagePath != null) {
+                    if (_formKey.currentState!.validate() &&
+                        _profileImagePath != null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           backgroundColor: Colors.white,
@@ -85,7 +85,8 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                         try {
                           userDocSnap = await FirebaseFirestore.instance
                               .collection('members')
-                              .doc(_registrationFormNumberController.text.trim())
+                              .doc(
+                                  _registrationFormNumberController.text.trim())
                               .get(const GetOptions(source: Source.server));
                         } catch (error) {
                           ScaffoldMessenger.of(context).clearSnackBars();
@@ -94,12 +95,15 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                             barrierDismissible: false,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: const Text('ইন্টারনেট বা সার্ভার সমস্যা'),
-                                content: const Text('সার্ভারে যুক্ত হওয়া যাচ্ছে না। ইন্টারনেট সংযোগ চেক করুন।\nতাও না হলে, কিছুক্ষণ পরে চেষ্টা করুন।'),
+                                title:
+                                    const Text('ইন্টারনেট বা সার্ভার সমস্যা'),
+                                content: const Text(
+                                    'সার্ভারে যুক্ত হওয়া যাচ্ছে না। ইন্টারনেট সংযোগ চেক করুন।\nতাও না হলে, কিছুক্ষণ পরে চেষ্টা করুন।'),
                                 actions: [
                                   TextButton(
                                     child: const Text('ওকে'),
-                                    onPressed: () => Navigator.of(context).pop(),
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
                                   ),
                                 ],
                               );
@@ -115,11 +119,13 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                             builder: (BuildContext context) {
                               return AlertDialog(
                                 title: const Text('নতুন সদস্য নন'),
-                                content: const Text('এই রেজিস্ট্রেশন নম্বরের একজন সদস্য এরই মাঝে আছেন। রেজিস্ট্রেশন নম্বর পরিবর্তন করুন।'),
+                                content: const Text(
+                                    'এই রেজিস্ট্রেশন নম্বরের একজন সদস্য এরই মাঝে আছেন। রেজিস্ট্রেশন নম্বর পরিবর্তন করুন।'),
                                 actions: [
                                   TextButton(
                                     child: const Text('ওকে'),
-                                    onPressed: () => Navigator.of(context).pop(),
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
                                   ),
                                 ],
                               );
@@ -127,12 +133,17 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                           );
                         } else {
                           //create multipart request for POST or PATCH method
-                          http.MultipartRequest request = http.MultipartRequest("POST", Uri.parse("https://api.imgbb.com/1/upload"));
+                          http.MultipartRequest request = http.MultipartRequest(
+                              "POST",
+                              Uri.parse("https://api.imgbb.com/1/upload"));
                           //add text fields
-                          request.fields["key"] = "5194aae0b4e48c22de17f04438b29e20";
-                          request.fields["name"] = _registrationFormNumberController.text.trim();
+                          request.fields["key"] = ""; //IMGBB API Key
+                          request.fields["name"] =
+                              _registrationFormNumberController.text.trim();
                           //create multipart using filepath, string or bytes
-                          http.MultipartFile profilePicture = await http.MultipartFile.fromPath("image", _profileImagePath!);
+                          http.MultipartFile profilePicture =
+                              await http.MultipartFile.fromPath(
+                                  "image", _profileImagePath!);
                           //add multipart to request
                           request.files.add(profilePicture);
                           http.StreamedResponse? response;
@@ -145,13 +156,15 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                               barrierDismissible: false,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: const Text('ইন্টারনেট বা সার্ভার সমস্যা'),
-                                  content:
-                                      const Text('ইমেজ সার্ভারে যুক্ত হওয়া যাচ্ছে না। ইন্টারনেট সংযোগ চেক করুন।\nতাও না হলে, কিছুক্ষণ পরে চেষ্টা করুন।'),
+                                  title:
+                                      const Text('ইন্টারনেট বা সার্ভার সমস্যা'),
+                                  content: const Text(
+                                      'ইমেজ সার্ভারে যুক্ত হওয়া যাচ্ছে না। ইন্টারনেট সংযোগ চেক করুন।\nতাও না হলে, কিছুক্ষণ পরে চেষ্টা করুন।'),
                                   actions: [
                                     TextButton(
                                       child: const Text('ওকে'),
-                                      onPressed: () => Navigator.of(context).pop(),
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
                                     ),
                                   ],
                                 );
@@ -178,26 +191,40 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                             );
                             return;
                           }
-                          String responseString = await response.stream.bytesToString();
+                          String responseString =
+                              await response.stream.bytesToString();
                           var responseObject = jsonDecode(responseString);
                           var dataObject = responseObject["data"];
                           userDocSnap.reference.set({
-                            'passwordHash': getSHA256Hash(sanitizeHtml(_passwordController.text)),
+                            'passwordHash': getSHA256Hash(
+                                sanitizeHtml(_passwordController.text)),
                             'isActivated': sanitizeHtml(isActivated.toString()),
-                            'profileImageLink': sanitizeHtml(dataObject["display_url"]),
-                            'profileImageDeleteLink': sanitizeHtml(dataObject["delete_url"]),
-                            'nameInEnglishLetters': sanitizeHtml(_nameInEnglishLettersController.text),
-                            'nameInBanglaLetters': sanitizeHtml(_nameInBanglaLettersController.text),
-                            'emailAddress': sanitizeHtml(_emailAddressController.text),
-                            'phoneNumbers': sanitizeHtml(_phoneNumbersController.text),
-                            'addressInQatar': sanitizeHtml(_addressInQatarController.text),
-                            'addressInBangladesh': sanitizeHtml(_addressInBangladeshController.text),
-                            'passportNumber': sanitizeHtml(_passportNumberController.text),
+                            'profileImageLink':
+                                sanitizeHtml(dataObject["display_url"]),
+                            'profileImageDeleteLink':
+                                sanitizeHtml(dataObject["delete_url"]),
+                            'nameInEnglishLetters': sanitizeHtml(
+                                _nameInEnglishLettersController.text),
+                            'nameInBanglaLetters': sanitizeHtml(
+                                _nameInBanglaLettersController.text),
+                            'emailAddress':
+                                sanitizeHtml(_emailAddressController.text),
+                            'phoneNumbers':
+                                sanitizeHtml(_phoneNumbersController.text),
+                            'addressInQatar':
+                                sanitizeHtml(_addressInQatarController.text),
+                            'addressInBangladesh': sanitizeHtml(
+                                _addressInBangladeshController.text),
+                            'passportNumber':
+                                sanitizeHtml(_passportNumberController.text),
                             'NID': sanitizeHtml(_theNIDController.text),
                             'QID': sanitizeHtml(_theQIDController.text),
-                            'monthlyFixedAmount': sanitizeHtml(_monthlyFixedAmountController.text),
-                            'refererData': sanitizeHtml(_refererDataController.text),
-                            'nomineeData': sanitizeHtml(_nomineeDataController.text),
+                            'monthlyFixedAmount': sanitizeHtml(
+                                _monthlyFixedAmountController.text),
+                            'refererData':
+                                sanitizeHtml(_refererDataController.text),
+                            'nomineeData':
+                                sanitizeHtml(_nomineeDataController.text),
                           }).then((value) {
                             ScaffoldMessenger.of(context).clearSnackBars();
                             showDialog(
@@ -206,11 +233,13 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: const Text('সফল'),
-                                  content: const Text('ডাটাবেসে নতুন সদস্যের তথ্য সেভ হয়েছে।'),
+                                  content: const Text(
+                                      'ডাটাবেসে নতুন সদস্যের তথ্য সেভ হয়েছে।'),
                                   actions: [
                                     TextButton(
                                       child: const Text('ওকে'),
-                                      onPressed: () => Navigator.of(context).pop(),
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
                                     ),
                                   ],
                                 );
@@ -232,7 +261,6 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                             _monthlyFixedAmountController.text = '';
                             _refererDataController.text = '';
                             _nomineeDataController.text = '';
-
                           }, onError: (error) {
                             ScaffoldMessenger.of(context).clearSnackBars();
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -280,7 +308,8 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                           controller: _registrationFormNumberController,
                           keyboardType: TextInputType.number,
                           decoration: const InputDecoration(
-                            hintText: 'সদস্যের রেজিস্ট্রেশন ফর্মের নম্বর লিখুন।',
+                            hintText:
+                                'সদস্যের রেজিস্ট্রেশন ফর্মের নম্বর লিখুন।',
                             labelText: 'সদস্য রেজিস্ট্রেশন নম্বর',
                           ),
                           // The validator receives the text that the user has entered.
@@ -353,7 +382,8 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                           ),
                           onTap: () async {
                             final ImagePicker _picker = ImagePicker();
-                            final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+                            final XFile? image = await _picker.pickImage(
+                                source: ImageSource.gallery);
                             if (image == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -431,7 +461,8 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                           controller: _phoneNumbersController,
                           keyboardType: TextInputType.number,
                           decoration: const InputDecoration(
-                            hintText: 'সদস্যের ফোন নম্বরগুলো স্পেস দিয়ে একটি করে লিখুন।',
+                            hintText:
+                                'সদস্যের ফোন নম্বরগুলো স্পেস দিয়ে একটি করে লিখুন।',
                             labelText: 'সদস্যের ফোন নম্বরসমূহ',
                           ),
                           minLines: 1,
@@ -504,7 +535,8 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                           controller: _theNIDController,
                           keyboardType: TextInputType.number,
                           decoration: const InputDecoration(
-                            hintText: 'সদস্যের বাংলাদেশি জাতীয় পরিচয়পত্রের নম্বর লিখুন',
+                            hintText:
+                                'সদস্যের বাংলাদেশি জাতীয় পরিচয়পত্রের নম্বর লিখুন',
                             labelText: 'সদস্যের জাতীয় পরিচয়পত্র নম্বর',
                           ),
                           minLines: 1,
@@ -548,8 +580,10 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                           controller: _monthlyFixedAmountController,
                           keyboardType: TextInputType.number,
                           decoration: const InputDecoration(
-                            hintText: ' ধার্য্যকৃত মাসিক চাঁদার পরিমাণ লিখুন (ইংরেজি ডিজিটে)',
-                            labelText: 'সদস্যের ধার্য্যকৃত মাসিক চাঁদার পরিমাণ (QR)',
+                            hintText:
+                                ' ধার্য্যকৃত মাসিক চাঁদার পরিমাণ লিখুন (ইংরেজি ডিজিটে)',
+                            labelText:
+                                'সদস্যের ধার্য্যকৃত মাসিক চাঁদার পরিমাণ (QR)',
                           ),
                           // The validator receives the text that the user has entered.
                           validator: (value) {
@@ -570,7 +604,8 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                           decoration: const InputDecoration(
                             hintText: 'সদস্যের রেফারারের তথ্য লিখুন',
                             labelText: 'সদস্যের রেফারারের তথ্য',
-                            helperText: 'ওপরে যা যা লিখবেন—\nরেফারারের নাম, রেফারার সদস্যের কী হোন,\nরেফারারের ফোন নম্বর, এনআইডি ও কাতার আইডি',
+                            helperText:
+                                'ওপরে যা যা লিখবেন—\nরেফারারের নাম, রেফারার সদস্যের কী হোন,\nরেফারারের ফোন নম্বর, এনআইডি ও কাতার আইডি',
                             helperStyle: TextStyle(
                               color: Colors.black87,
                             ),
@@ -592,7 +627,8 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                           decoration: const InputDecoration(
                             hintText: 'সদস্যের নমিনির তথ্য লিখুন',
                             labelText: 'সদস্যের নমিনির তথ্য',
-                            helperText: 'ওপরে যা যা লিখবেন—\nনমিনির নাম, নমিনি সদস্যের কী হোন,\nনমিনির ফোন নম্বর, এনআইডি ও ঠিকানা',
+                            helperText:
+                                'ওপরে যা যা লিখবেন—\nনমিনির নাম, নমিনি সদস্যের কী হোন,\nনমিনির ফোন নম্বর, এনআইডি ও ঠিকানা',
                             helperStyle: TextStyle(
                               color: Colors.black87,
                             ),
